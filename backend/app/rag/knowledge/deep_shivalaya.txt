@@ -1,0 +1,67 @@
+LOCATION: Deep Cave Shivalaya (deep_shivalaya)
+
+## Overview
+The Deep Cave Shivalaya is the inner, sacred chamber of Gupteshwor Mahadev Cave — the
+section that lies beyond the tourist-lit staircase, where the cave narrows, darkens,
+and drops toward the underground channel that carries the water from Devi's Fall. This
+is a working geological and hydrological system as much as a shrine: the roar of the
+Pardi Khola is audible throughout, since the same water that vanishes at the sinkhole
+overhead flows through passages beneath and beside this chamber.
+
+## Access requirement
+Entry to the Deep Cave Shivalaya is locked until a visitor has rented a Flashlight and
+Safety Helmet from the gear vendor at the Cave Entrance Plaza. The deeper passage has
+inconsistent lighting (the installed lighting has a power backup, but locals still
+recommend bringing an independent light source), low, uneven ceilings in places, and
+slick limestone underfoot — conditions that make the standard helmet-and-headlamp setup
+a real safety requirement, not a gimmick.
+
+## Subterranean dampness and conditions
+The inner chamber is persistently damp — condensation and seepage from the limestone
+walls combine with spray carried through the passage from the underground stream.
+Humidity readings in similar Himalayan karst caves typically run high, especially
+during and immediately after monsoon season, when the water table and infiltration
+both rise sharply. Paths can be slippery year-round; guides recommend slow, careful
+movement, especially in the sloped connecting passage.
+
+## Natural stalactite and stalagmite formations
+As with other caves in the Pokhara Valley's limestone (karst) geology, mineral-rich
+water dripping through the rock over very long timescales has formed stalactites
+(hanging from the ceiling) and, in places, corresponding stalagmite growth from the
+floor. These formations are fragile and slow-growing — some limestone cave formations
+elsewhere in the world are known to grow at rates of only fractions of a millimeter per
+year, so visitors are asked not to touch them.
+
+## Limestone structure
+Pokhara Valley sits on a thick sequence of limestone bedrock, which is chemically
+soluble in slightly acidic groundwater. Over geological time this process (karstification)
+carved the cave's chambers, connecting passages, and the sinkhole/tunnel system that
+links Devi's Fall on the surface to this chamber underground. The same karst process is
+responsible for the many sinkholes recorded elsewhere in the Pokhara Valley, including
+over 200 documented in the nearby Armala area between 2013 and 2017 — evidence that this
+landscape is still actively dissolving and shifting today, not a static ancient
+formation.
+
+## Underground water sound acoustics
+Because the chamber is enclosed rock with a hard, wet limestone surface, sound behaves
+very differently than in open air. The rush of the underground stream reverberates and
+amplifies through the passage, often making the water sound louder and closer than it
+visually appears — a disorienting but memorable feature of the deep cave experience.
+Visitors often describe being able to "feel" the sound as much as hear it, especially
+near the points where the passage runs close to the hidden channel.
+
+## The shrine
+At the heart of the chamber is a Shivalinga — a naturally-formed rock structure venerated
+as a symbol of Lord Shiva, said to have been found here by the cave's original
+16th-century discoverers and formally consecrated in the early 1990s. Statues and shrines
+to other Hindu deities, including Parvati, Saraswati, and Nageshwar, are also present
+along the passage. Photography is prohibited in parts of this section, and the site is
+actively monitored and treated as a place of active worship, not only a tourist stop.
+
+## Seasonal safety consideration
+Because the deep chamber sits directly along the underground path of the Pardi Khola,
+its safety for entry varies with the stream's seasonal water flow and the resulting
+humidity in the chamber. During heavy monsoon flow, sections of this deeper passage are
+sometimes closed entirely due to flooding risk. This is the basis for the
+calculate_subterranean_risk tool, which assesses current humidity and water flow
+readings against safety thresholds before recommending entry.

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Devi's Fall & Gupteshwor Cave — Pokhara's Wonder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/landing.css">
+</head>
+<body>
+
+  <div class="scene" aria-hidden="true">
+    <svg class="cross-section" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+      <!-- sky/surface -->
+      <rect x="0" y="0" width="800" height="180" fill="#0B1A1F"/>
+      <!-- rock body -->
+      <path d="M0,180 L800,180 L800,600 L0,600 Z" fill="#16302F"/>
+      <!-- water drop path: surface river -> fall -> underground channel -->
+      <path class="water-path" d="M120,0 L120,150 Q120,190 160,200 L360,250 Q420,265 420,320 L420,480 Q420,540 480,545 L800,545"
+            fill="none" stroke="#6FA8A3" stroke-width="10" stroke-linecap="round" opacity="0.85"/>
+      <!-- cave chamber outline -->
+      <path d="M330,330 Q300,420 360,470 Q420,520 520,500 Q620,480 610,400 Q600,320 520,300 Q420,280 330,330 Z"
+            fill="#0B1A1F" stroke="#C9A876" stroke-width="2" opacity="0.9"/>
+      <!-- stalactites -->
+      <path d="M370,300 L378,340 L386,300 Z" fill="#C9A876" opacity="0.5"/>
+      <path d="M430,290 L440,350 L450,290 Z" fill="#C9A876" opacity="0.5"/>
+      <path d="M500,300 L508,345 L516,300 Z" fill="#C9A876" opacity="0.5"/>
+      <!-- droplets animating down the path -->
+      <circle class="droplet d1" r="4" fill="#9FD1CC"/>
+      <circle class="droplet d2" r="4" fill="#9FD1CC"/>
+      <circle class="droplet d3" r="4" fill="#9FD1CC"/>
+    </svg>
+  </div>
+
+  <main class="content">
+    <p class="eyebrow">Pokhara, Nepal · Interactive Field Guide</p>
+    <h1>Welcome to Devi's Fall<br><span class="amp">&amp;</span> Gupteshwor Cave</h1>
+    <p class="subtitle">Pokhara's Wonder — where the Pardi Khola vanishes into rock, and the cave keeps the story going.</p>
+
+    <button id="enter-btn" class="enter-btn">
+      <span>Begin the Descent</span>
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2v12M9 14l-5-5M9 14l5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+    <p class="hint">Voice-guided · Move between locations · Some ground requires gear</p>
+  </main>
+
+  <script src="js/landing.js"></script>
+</body>
+</html>
