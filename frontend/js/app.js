@@ -16,6 +16,18 @@ const textInput = document.getElementById("text-input");
 let sessionId = null;
 let currentState = null; // last known { current_location, background_asset, gear_rented, available_destinations }
 
+// --- Interrupt-and-resume state ---
+// currentAbortController: cancels the in-flight /chat request for whatever
+//   question is currently being answered, if the visitor interrupts with a
+//   new one before it finishes.
+// currentlyAnsweringQuestion: the question text tied to that in-flight
+//   request / currently-playing narration.
+// interruptedQuestion: set when an interruption happens, so we can offer to
+//   come back to it once the new question has been answered.
+let currentAbortController = null;
+let currentlyAnsweringQuestion = null;
+let interruptedQuestion = null;
+
 // Friendly display names + suggested questions per location, used to
 // build context-aware action chips (the spec's third frontend requirement).
 const LOCATION_META = {
@@ -143,24 +155,80 @@ async function startSession() {
 
 async function sendMessage(text) {
   if (!sessionId || !text.trim()) return;
+
+  // --- Interrupt handling ---
+  // If the guide is still speaking, or a previous /chat request is still
+  // in flight, this new message counts as an interruption: stop the old
+  // narration immediately, abort the old network request so its answer
+  // can't "catch up" and get spoken later on top of the new one, and
+  // remember what was interrupted so we can offer to resume it afterward.
+  const wasInterrupting = isSpeaking() || currentAbortController !== null;
+  if (wasInterrupting) {
+    stopSpeaking();
+    if (currentAbortController) {
+      currentAbortController.abort();
+    }
+    if (currentlyAnsweringQuestion) {
+      interruptedQuestion = currentlyAnsweringQuestion;
+    }
+  }
+
   addMessage("visitor", text);
+  currentlyAnsweringQuestion = text;
+
+  const abortController = new AbortController();
+  currentAbortController = abortController;
 
   try {
     const res = await fetch(`${API_BASE}/chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ session_id: sessionId, message: text }),
+      signal: abortController.signal,
     });
     if (!res.ok) throw new Error("Chat request failed");
     const data = await res.json();
 
     addMessage("guide", data.response_text);
-    speak(data.response_text);
     applyState(data);
+
+    // Only offer to resume the old question once the NEW answer has
+    // actually finished playing aloud — not before, so the two answers
+    // never overlap or compete for attention.
+    const questionToResume = interruptedQuestion;
+    interruptedQuestion = null;
+    speak(data.response_text, () => {
+      if (questionToResume) offerResume(questionToResume);
+    });
   } catch (err) {
+    if (err.name === "AbortError") {
+      // Expected when the visitor interrupted this exact request — the
+      // new question's request is already handling the response, so
+      // there's nothing to show the user here.
+      return;
+    }
     console.error(err);
     addMessage("system", "Something went wrong reaching the guide. Please try again.");
+  } finally {
+    if (currentAbortController === abortController) {
+      currentAbortController = null;
+      currentlyAnsweringQuestion = null;
+    }
   }
+}
+
+function offerResume(question) {
+  addMessage("system", `We got sidetracked — want me to go back to "${question}"?`);
+
+  const chip = document.createElement("button");
+  chip.className = "chip chip-resume";
+  const short = question.length > 44 ? question.slice(0, 44) + "…" : question;
+  chip.textContent = `↩ Continue: "${short}"`;
+  chip.addEventListener("click", () => {
+    chip.remove();
+    sendMessage(question);
+  });
+  chipsRow.prepend(chip);
 }
 
 async function rentGear() {
@@ -209,13 +277,24 @@ micBtn.addEventListener("click", async () => {
     return;
   }
 
+  // Tapping the mic while the guide is talking is itself an interruption —
+  // stop the narration right away so it isn't still playing while you speak.
+  if (isSpeaking()) {
+    stopSpeaking();
+  }
+
   listening = true;
   micBtn.classList.add("listening");
   try {
     const transcript = await listenOnce();
     await sendMessage(transcript);
   } catch (err) {
-    console.warn("Speech recognition:", err.message);
+    if (err.message === "no-speech") {
+      addMessage("system", "Didn't catch that — try again, or type your question below.");
+    } else {
+      console.warn("Speech recognition:", err.message);
+      addMessage("system", "Voice input had a problem. Try again, or type your question below.");
+    }
   } finally {
     listening = false;
     micBtn.classList.remove("listening");

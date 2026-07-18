@@ -26,7 +26,7 @@ class Settings(BaseSettings):
 
     # --- Model names per provider (overridable without touching code) ---
     GROQ_MODEL: str = "llama-3.3-70b-versatile"
-    GEMINI_MODEL: str = "gemini-1.5-flash"
+    GEMINI_MODEL: str = "gemini-2.5-flash"  # gemini-1.5-flash was fully shut down; 2.0-flash also retired June 2026
     OPENAI_MODEL: str = "gpt-4o-mini"
 
     # --- App behavior ---

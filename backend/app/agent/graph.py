@@ -62,6 +62,43 @@ LOCATIONS: dict[str, LocationNode] = {
 LOCKED_EDGE = {"from": "entrance_plaza", "to": "deep_shivalaya", "requires": "gear_rented"}
 
 
+# Real-world travel directions between the graph's locations, keyed by
+# (from, to) location id pairs. change_location() attaches the relevant
+# route to its result so the agent can narrate "how to get there" as part
+# of announcing the move.
+#
+# Note: "how do I reach Devi's Fall" style questions asked from OUTSIDE
+# the graph entirely (before the visitor has arrived) are answered via
+# look_up_artifact() instead, from the "How to reach Devi's Fall" section
+# in app/rag/knowledge/devis_fall.txt — that's the single source of truth
+# for arrival directions, kept separate from this graph-internal data so
+# the two don't drift out of sync with each other.
+TRAVEL_ROUTES = {
+    ("devis_fall", "entrance_plaza"): (
+        "Just cross the road from the Devi's Fall overlook — the Gupteshwor "
+        "Cave archway is directly opposite, about a two-minute walk."
+    ),
+    ("entrance_plaza", "devis_fall"): (
+        "Head back out through the archway and cross the road — Devi's Fall "
+        "is right there, about a two-minute walk."
+    ),
+    ("entrance_plaza", "deep_shivalaya"): (
+        "From the plaza, head down the spiral staircase past the ticket "
+        "checkpoint. The passage narrows and slopes down toward the inner "
+        "chamber — a few minutes' careful walk on wet stone."
+    ),
+    ("deep_shivalaya", "entrance_plaza"): (
+        "Follow the passage back up the sloped walkway and staircase toward "
+        "the daylight of the plaza."
+    ),
+}
+
+
+def get_travel_route(from_location: str, to_location: str) -> str | None:
+    """Returns the narrated travel instructions for a graph edge, if any."""
+    return TRAVEL_ROUTES.get((from_location, to_location))
+
+
 def get_available_destinations(current_location: str, gear_rented: bool) -> list[str]:
     """
     Returns the list of location ids reachable from current_location right now,

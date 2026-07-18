@@ -9,7 +9,7 @@ location graph — but only along valid edges, and respecting the gear lock
 on the entrance_plaza -> deep_shivalaya edge.
 """
 
-from app.agent.graph import LOCATIONS, is_move_allowed
+from app.agent.graph import LOCATIONS, is_move_allowed, get_travel_route
 from app.agent.session import SessionState
 
 TOOL_SCHEMA = {
@@ -39,17 +39,20 @@ TOOL_SCHEMA = {
 
 
 def change_location(destination: str, session: SessionState) -> dict:
+    origin = session.current_location  # captured BEFORE mutating, so the route lookup uses the real edge
+
     allowed, reason = is_move_allowed(
-        from_location=session.current_location,
+        from_location=origin,
         to_location=destination,
         gear_rented=session.gear_rented,
     )
 
     if not allowed:
-        return {"success": False, "reason": reason, "current_location": session.current_location}
+        return {"success": False, "reason": reason, "current_location": origin}
 
     session.current_location = destination
     node = LOCATIONS[destination]
+    route = get_travel_route(origin, destination)
 
     return {
         "success": True,
@@ -57,4 +60,5 @@ def change_location(destination: str, session: SessionState) -> dict:
         "location_name": node.name,
         "description": node.description,
         "background_asset": node.background_asset,
+        "travel_route": route,
     }
